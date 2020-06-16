@@ -2,8 +2,8 @@ import "./styles.css";
 import "./w3.css";
 
 // Game vars
-var width = 7;
-var height = 7;
+var width = 5;
+var height = 5;
 var turn = "X";
 var canPlay = true;
 var timer = 10;
@@ -112,6 +112,8 @@ function handleClick(posY, posX) {
   if (checkWin(posY, posX)) {
     canPlay = false;
     document.getElementById("summary").innerHTML = turn + " won!";
+    clearInterval(timerFunc);
+    document.getElementById("progress").style.visibility = "hidden";
     return;
   }
 
