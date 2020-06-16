@@ -7,6 +7,7 @@ var height = 5;
 var turn = "x";
 var timer = 10;
 var timerFunc = null;
+var canPlay = true;
 
 // Elements
 var table = document.getElementById("board");
@@ -24,7 +25,8 @@ function createTable() {
   for (var i = 0; i < height; i++) {
     table.insertRow(i);
     for (var j = 0; j < width; j++) {
-      table.rows.item(i).insertCell(j).innerHTML = "";
+      table.rows.item(i).insertCell(j).innerHTML =
+        '<button id = "tile"></button>';
     }
   }
   cells = table.getElementsByTagName("td");
@@ -104,22 +106,23 @@ function handleClick(posY, posX) {
   /* Other check conditions disabled
    * So that the code supports multiple executions
    */
-  /*if (getCell(posY, posX).innerHTML !== "") {
+  if (getCell(posY, posX).innerHTML !== "") {
     return;
-  }*/
+  }
   if (moving) {
     return;
   }
-  /*
+
   if (!canPlay) {
     return;
-  }*/
+  }
 
   // Change the button text to either X or O and change bg color
   editCell(posY, posX);
 
   // Check if the player won
   if (checkWin(posY, posX)) {
+    canPlay = false;
     document.getElementById("summary").innerHTML = turn + " won!";
     clearInterval(timerFunc);
     document.getElementById("progress").style.visibility = "hidden";
@@ -140,7 +143,7 @@ function editCell(posY, posX) {
 }
 
 function getCell(posY, posX) {
-  return table.rows[posY].getElementsByTagName("td")[posX];
+  return table.rows[posY].getElementsByTagName("button")[posX];
 }
 
 function checkWin(posY, posX) {
@@ -226,9 +229,10 @@ function addRow(amount, down) {
     }
     for (var j = 0; j < width; j++) {
       if (down) {
-        table.rows[height].insertCell(j).innerHTML = "";
+        table.rows[height].insertCell(j).innerHTML =
+          '<button id = "tile"></button>';
       } else {
-        table.rows[0].insertCell(j).innerHTML = "";
+        table.rows[0].insertCell(j).innerHTML = '<button id = "tile"></button>';
       }
     }
     height++;
@@ -240,9 +244,10 @@ function addColumn(amount, right) {
   for (var i = 0; i < amount; i++) {
     for (var j = 0; j < table.rows.length; j++) {
       if (right) {
-        table.rows[j].insertCell(width).innerHTML = "";
+        table.rows[j].insertCell(width).innerHTML =
+          '<button id = "tile"></button>';
       } else {
-        table.rows[j].insertCell(0).innerHTML = "";
+        table.rows[j].insertCell(0).innerHTML = '<button id = "tile"></button>';
       }
     }
     width++;
