@@ -4,7 +4,7 @@ import "./w3.css";
 // Game vars
 var width = 5;
 var height = 5;
-var turn = "/x/i";
+var turn = "x";
 var timer = 10;
 var timerFunc = null;
 
@@ -24,8 +24,7 @@ function createTable() {
   for (var i = 0; i < height; i++) {
     table.insertRow(i);
     for (var j = 0; j < width; j++) {
-      table.rows.item(i).insertCell(j).innerHTML =
-        '<button id="tile"></button>';
+      table.rows.item(i).insertCell(j).innerHTML = "";
     }
   }
   cells = table.getElementsByTagName("td");
@@ -141,7 +140,7 @@ function editCell(posY, posX) {
 }
 
 function getCell(posY, posX) {
-  return table.rows[posY].getElementsByTagName("button")[posX];
+  return table.rows[posY].getElementsByTagName("td")[posX];
 }
 
 function checkWin(posY, posX) {
@@ -227,10 +226,9 @@ function addRow(amount, down) {
     }
     for (var j = 0; j < width; j++) {
       if (down) {
-        table.rows[height].insertCell(j).innerHTML =
-          '<button id="tile"></button>';
+        table.rows[height].insertCell(j).innerHTML = "";
       } else {
-        table.rows[0].insertCell(j).innerHTML = '<button id="tile"></button>';
+        table.rows[0].insertCell(j).innerHTML = "";
       }
     }
     height++;
@@ -242,10 +240,9 @@ function addColumn(amount, right) {
   for (var i = 0; i < amount; i++) {
     for (var j = 0; j < table.rows.length; j++) {
       if (right) {
-        table.rows[j].insertCell(width).innerHTML =
-          '<button id="tile"></button>';
+        table.rows[j].insertCell(width).innerHTML = "";
       } else {
-        table.rows[j].insertCell(0).innerHTML = '<button id="tile"></button>';
+        table.rows[j].insertCell(0).innerHTML = "";
       }
     }
     width++;
@@ -259,7 +256,7 @@ function changeTurn() {
   } else {
     document.getElementById("progress").style.visibility = "visible";
   }
-  turn = turn === "/x/i" ? "/o/i" : "/x/i";
+  turn = turn === "x" ? "o" : "x";
   document.getElementById("summary").innerHTML = turn + "'s turn.";
   // Start the timer on the first move
   timer = 10;
