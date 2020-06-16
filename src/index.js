@@ -4,8 +4,7 @@ import "./w3.css";
 // Game vars
 var width = 5;
 var height = 5;
-var turn = "X";
-var canPlay = true;
+var turn = "x";
 var timer = 10;
 var timerFunc = null;
 
@@ -22,7 +21,6 @@ var moveAmountY = 0;
 var scale = 1;
 
 function createTable() {
-  canPlay = true;
   for (var i = 0; i < height; i++) {
     table.insertRow(i);
     for (var j = 0; j < width; j++) {
@@ -123,7 +121,6 @@ function handleClick(posY, posX) {
 
   // Check if the player won
   if (checkWin(posY, posX)) {
-    canPlay = false;
     document.getElementById("summary").innerHTML = turn + " won!";
     clearInterval(timerFunc);
     document.getElementById("progress").style.visibility = "hidden";
@@ -140,7 +137,7 @@ function editCell(posY, posX) {
   var cell = getCell(posY, posX);
   cell.innerHTML = turn;
   cell.style.backgroundColor =
-    turn === "X" ? "rgb(124, 252, 0)" : "rgb(250, 128, 114)";
+    turn === "x" ? "rgb(124, 252, 0)" : "rgb(250, 128, 114)";
 }
 
 function getCell(posY, posX) {
@@ -262,7 +259,7 @@ function changeTurn() {
   } else {
     document.getElementById("progress").style.visibility = "visible";
   }
-  turn = turn === "X" ? "O" : "X";
+  turn = turn === "x" ? "o" : "x";
   document.getElementById("summary").innerHTML = turn + "'s turn.";
   // Start the timer on the first move
   timer = 10;
