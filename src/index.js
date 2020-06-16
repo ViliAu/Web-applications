@@ -1,13 +1,18 @@
 import "./styles.css";
+import "./w3.css";
 
 // Game vars
 var width = 7;
 var height = 7;
 var turn = "X";
+var canPlay = true;
+var timer = 10;
+var timerFunc = null;
+
+// Elements
 var table = document.getElementById("board");
 var cells = table.getElementsByTagName("td");
-var canPlay = true;
-var started = false;
+var progressBar = document.getElementById("progress_container");
 
 // Mouse vars
 var clicked = false;
@@ -21,7 +26,8 @@ function createTable() {
   for (var i = 0; i < height; i++) {
     table.insertRow(i);
     for (var j = 0; j < width; j++) {
-      table.rows.item(i).insertCell(j).innerHTML = "<button></button>";
+      table.rows.item(i).insertCell(j).innerHTML =
+        '<button id="tile"></button>';
     }
   }
   cells = table.getElementsByTagName("td");
@@ -98,9 +104,6 @@ function handleClick(posY, posX) {
   if (!canPlay) {
     return;
   }
-  if (!started) {
-    started = true;
-  }
 
   // Change the button text to either X or O and change bg color
   editCell(posY, posX);
@@ -116,8 +119,18 @@ function handleClick(posY, posX) {
   checkExpanding(posY, posX);
 
   // Change turns and update summary
-  turn = turn === "X" ? "O" : "X";
-  document.getElementById("summary").innerHTML = turn + "'s turn.";
+  changeTurn();
+}
+
+function editCell(posY, posX) {
+  var cell = getCell(posY, posX);
+  cell.innerHTML = turn;
+  cell.style.backgroundColor =
+    turn === "X" ? "rgb(124, 252, 0)" : "rgb(250, 128, 114)";
+}
+
+function getCell(posY, posX) {
+  return table.rows[posY].getElementsByTagName("button")[posX];
 }
 
 function checkWin(posY, posX) {
@@ -194,17 +207,6 @@ function checkExpanding(posY, posX) {
   }
 }
 
-function editCell(posY, posX) {
-  var cell = getCell(posY, posX);
-  cell.innerHTML = turn;
-  cell.style.backgroundColor =
-    turn === "X" ? "rgb(124, 252, 0)" : "rgb(250, 128, 114)";
-}
-
-function getCell(posY, posX) {
-  return table.rows[posY].getElementsByTagName("button")[posX];
-}
-
 function addRow(amount, down) {
   for (var i = 0; i < amount; i++) {
     if (down) {
@@ -214,9 +216,10 @@ function addRow(amount, down) {
     }
     for (var j = 0; j < width; j++) {
       if (down) {
-        table.rows[height].insertCell(j).innerHTML = "<button></button>";
+        table.rows[height].insertCell(j).innerHTML =
+          '<button id="tile"></button>';
       } else {
-        table.rows[0].insertCell(j).innerHTML = "<button></button>";
+        table.rows[0].insertCell(j).innerHTML = '<button id="tile"></button>';
       }
     }
     height++;
@@ -228,14 +231,40 @@ function addColumn(amount, right) {
   for (var i = 0; i < amount; i++) {
     for (var j = 0; j < table.rows.length; j++) {
       if (right) {
-        table.rows[j].insertCell(width).innerHTML = "<button></button>";
+        table.rows[j].insertCell(width).innerHTML =
+          '<button id="tile"></button>';
       } else {
-        table.rows[j].insertCell(0).innerHTML = "<button></button>";
+        table.rows[j].insertCell(0).innerHTML = '<button id="tile"></button>';
       }
     }
     width++;
   }
   setCellListeners();
+}
+
+function changeTurn() {
+  if (timerFunc != null) {
+    clearInterval(timerFunc);
+  } else {
+    document.getElementById("progress").style.visibility = "visible";
+  }
+  turn = turn === "X" ? "O" : "X";
+  document.getElementById("summary").innerHTML = turn + "'s turn.";
+  // Start the timer on the first move
+  timer = 10;
+  timerFunc = setInterval(incrementTimer, 50);
+}
+
+function incrementTimer() {
+  timer -= 0.05;
+  // Clamp timer
+  timer = timer <= 0 ? 0 : timer;
+  if (timer <= 0.04) {
+    changeTurn();
+  }
+  progressBar.style.width = (timer / 10) * 100 + "%";
+  // Limit the decimals to 1
+  progressBar.innerHTML = timer.toFixed(1) + "s";
 }
 
 createTable();
