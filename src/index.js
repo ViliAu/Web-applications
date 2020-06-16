@@ -7,6 +7,7 @@ var turn = "X";
 var table = document.getElementById("board");
 var cells = table.getElementsByTagName("td");
 var canPlay = true;
+var started = false;
 
 // Mouse vars
 var clicked = false;
@@ -20,7 +21,7 @@ function createTable() {
   for (var i = 0; i < height; i++) {
     table.insertRow(i);
     for (var j = 0; j < width; j++) {
-      table.rows.item(i).insertCell(j).innerHTML = "<button>-</button>";
+      table.rows.item(i).insertCell(j).innerHTML = "<button></button>";
     }
   }
   cells = table.getElementsByTagName("td");
@@ -88,7 +89,7 @@ function handleClick(posY, posX) {
   if (posX == null || posY == null) {
     return;
   }
-  if (getCell(posY, posX).innerHTML !== "-") {
+  if (getCell(posY, posX).innerHTML !== "") {
     return;
   }
   if (moving) {
@@ -96,6 +97,9 @@ function handleClick(posY, posX) {
   }
   if (!canPlay) {
     return;
+  }
+  if (!started) {
+    started = true;
   }
 
   // Change the button text to either X or O and change bg color
@@ -210,9 +214,9 @@ function addRow(amount, down) {
     }
     for (var j = 0; j < width; j++) {
       if (down) {
-        table.rows[height].insertCell(j).innerHTML = "<button>-</button>";
+        table.rows[height].insertCell(j).innerHTML = "<button></button>";
       } else {
-        table.rows[0].insertCell(j).innerHTML = "<button>-</button>";
+        table.rows[0].insertCell(j).innerHTML = "<button></button>";
       }
     }
     height++;
@@ -224,20 +228,14 @@ function addColumn(amount, right) {
   for (var i = 0; i < amount; i++) {
     for (var j = 0; j < table.rows.length; j++) {
       if (right) {
-        table.rows[j].insertCell(width).innerHTML = "<button>-</button>";
+        table.rows[j].insertCell(width).innerHTML = "<button></button>";
       } else {
-        table.rows[j].insertCell(0).innerHTML = "<button>-</button>";
+        table.rows[j].insertCell(0).innerHTML = "<button></button>";
       }
     }
     width++;
   }
   setCellListeners();
 }
-
-/*
-function restartGame() {
-  cells = [];
-  createTable();
-}*/
 
 createTable();
