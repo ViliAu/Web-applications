@@ -4,7 +4,7 @@ import "./w3.css";
 // Game vars
 var width = 5;
 var height = 5;
-var turn = "x";
+var turn = "/x/i";
 var timer = 10;
 var timerFunc = null;
 
@@ -259,7 +259,7 @@ function changeTurn() {
   } else {
     document.getElementById("progress").style.visibility = "visible";
   }
-  turn = turn === "x" ? "o" : "x";
+  turn = turn === "/x/i" ? "/o/i" : "/x/i";
   document.getElementById("summary").innerHTML = turn + "'s turn.";
   // Start the timer on the first move
   timer = 10;
