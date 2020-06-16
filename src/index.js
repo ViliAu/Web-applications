@@ -31,19 +31,28 @@ function createTable() {
     }
   }
   cells = table.getElementsByTagName("td");
-  setCellListeners();
+  updateCellListeners();
   setupMouse();
 }
 
-function setCellListeners() {
+function updateCellListeners() {
+  // Get cells
   cells = table.getElementsByTagName("td");
+
+  /* Set a listener to cells without an attribute
+   * called 'clickable' that is true
+   */
   for (var j = 0; j < cells.length; j++) {
-    cells[j].addEventListener("click", function() {
-      handleClick(this.parentNode.rowIndex, this.cellIndex);
-    });
+    if (cells[j].getAttribute("clickable") !== "true") {
+      cells[j].addEventListener("click", function() {
+        handleClick(this.parentNode.rowIndex, this.cellIndex);
+      });
+      cells[j].setAttribute("clickable", "true");
+    }
   }
 }
 
+// This procedure handles mouse events
 function setupMouse() {
   // Mouse down listener
   document.addEventListener("mousedown", function(event) {
@@ -95,15 +104,19 @@ function handleClick(posY, posX) {
   if (posX == null || posY == null) {
     return;
   }
-  if (getCell(posY, posX).innerHTML !== "") {
+  /* Other check conditions disabled
+   * So that the code supports multiple executions
+   */
+  /*if (getCell(posY, posX).innerHTML !== "") {
     return;
-  }
+  }*/
   if (moving) {
     return;
   }
+  /*
   if (!canPlay) {
     return;
-  }
+  }*/
 
   // Change the button text to either X or O and change bg color
   editCell(posY, posX);
@@ -116,7 +129,6 @@ function handleClick(posY, posX) {
     document.getElementById("progress").style.visibility = "hidden";
     return;
   }
-
   // Check if the table needs expanding
   checkExpanding(posY, posX);
 
@@ -226,7 +238,7 @@ function addRow(amount, down) {
     }
     height++;
   }
-  setCellListeners();
+  updateCellListeners();
 }
 
 function addColumn(amount, right) {
@@ -241,7 +253,7 @@ function addColumn(amount, right) {
     }
     width++;
   }
-  setCellListeners();
+  updateCellListeners();
 }
 
 function changeTurn() {
