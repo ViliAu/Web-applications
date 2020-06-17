@@ -1,5 +1,6 @@
 import "./styles.css";
 import "./w3.css";
+import "./materialize.css";
 
 // Game vars
 var width = 5;
@@ -10,8 +11,8 @@ var timerFunc = null;
 var canPlay = true;
 
 // Elements
-var table = document.getElementById("board");
-var cells = table.getElementsByTagName("td");
+var board = document.getElementById("board");
+var cells = board.getElementsByClassName("col");
 var progressBar = document.getElementById("progress_container");
 
 // Mouse vars
@@ -23,30 +24,40 @@ var scale = 1;
 
 function createTable() {
   for (var i = 0; i < height; i++) {
-    table.insertRow(i);
+    // Create a row child and add it to the grid
+    let row = document.createElement("div");
+    row.className = "row";
+    board.appendChild(row);
+
     for (var j = 0; j < width; j++) {
-      table.rows.item(i).insertCell(j).innerHTML =
-        '<button id = "tile"></button>';
+      // Create a cell child and add it to the row
+      let cell = document.createElement("div");
+      cell.className = "col s1";
+      //cell.id = "tile";
+      cell.innerHTML = "<button id = \"tile\"/>";
+      board.getElementsByClassName("row")[i].appendChild(cell);
     }
   }
-  cells = table.getElementsByTagName("td");
+  cells = board.getElementsByClassName("col");
   updateCellListeners();
   setupMouse();
 }
 
 function updateCellListeners() {
   // Get cells
-  cells = table.getElementsByTagName("td");
+  cells = board.getElementsByClassName("col");
 
   /* Set a listener to cells without an attribute
    * called 'clickable' that is true
    */
-  for (var j = 0; j < cells.length; j++) {
-    if (cells[j].getAttribute("clickable") !== "true") {
-      cells[j].addEventListener("click", function() {
-        handleClick(this.parentNode.rowIndex, this.cellIndex);
+  for (let i = 0; i < board.getElementsByClassName("row").length; i++) {
+    for (let j = 0;
+      j < board.getElementsByClassName("row")[i]
+      .getElementsByClassName("col").length; j++) {
+        board.getElementsByClassName("row")[i]
+        .getElementsByClassName("col")[j].addEventListener("click", function() {
+        handleClick(i, j);
       });
-      cells[j].setAttribute("clickable", "true");
     }
   }
 }
@@ -71,7 +82,7 @@ function setupMouse() {
       if (Math.abs(moveAmountX) > 10 || Math.abs(moveAmountY) > 10) {
         moving = true;
       }
-      table.style.transform +=
+      board.style.transform +=
         "translate(" +
         event.movementX * 0.8 +
         "px, " +
@@ -94,11 +105,12 @@ function setupMouse() {
     // Clamp scale
     scale = scale < 0.5 ? 0.5 : scale > 1.5 ? 1.5 : scale;
     // Apply scale
-    table.style.transform = "scale(" + scale + ", " + scale + ")";
+    board.style.transform = "scale(" + scale + ", " + scale + ")";
   });
 }
 
 function handleClick(posY, posX) {
+  console.log(posY + " "+posX);
   // Check if the click is valid
   if (posX == null || posY == null) {
     return;
@@ -112,11 +124,9 @@ function handleClick(posY, posX) {
   if (moving) {
     return;
   }
-
   if (!canPlay) {
     return;
   }
-
   // Change the button text to either X or O and change bg color
   editCell(posY, posX);
 
@@ -129,7 +139,7 @@ function handleClick(posY, posX) {
     return;
   }
   // Check if the table needs expanding
-  checkExpanding(posY, posX);
+  //checkExpanding(posY, posX);
 
   // Change turns and update summary
   changeTurn();
@@ -143,7 +153,10 @@ function editCell(posY, posX) {
 }
 
 function getCell(posY, posX) {
-  return table.rows[posY].getElementsByTagName("button")[posX];
+  return board
+    .getElementsByClassName("row")[posY]
+    .getElementsByClassName("col")[posX]
+    .getElementsByTagName("button")[0];
 }
 
 function checkWin(posY, posX) {
@@ -222,17 +235,25 @@ function checkExpanding(posY, posX) {
 
 function addRow(amount, down) {
   for (var i = 0; i < amount; i++) {
+    // Create a cell child and add it to the row
+    let row = document.createElement("div");
+    row.className = "row";
+    //cell.id = "tile";
     if (down) {
-      table.insertRow(-1);
+      board.appendChild(row);
     } else {
-      table.insertRow(0);
+      board.insertBefore(row, board.childNodes[0]);
     }
     for (var j = 0; j < width; j++) {
+      let col = document.createElement("div");
+      col.className = "col";
       if (down) {
-        table.rows[height].insertCell(j).innerHTML =
+        board.getElementsByClassName("row")[board.getElementsByClassName("row").length-1]
+        .appendChild(col).innerHTML =
           '<button id = "tile"></button>';
       } else {
-        table.rows[0].insertCell(j).innerHTML = '<button id = "tile"></button>';
+        board.getElementsByClassName("row")[0]
+        .appendChild(col).innerHTML = '<button id = "tile"></button>';
       }
     }
     height++;
@@ -242,12 +263,18 @@ function addRow(amount, down) {
 
 function addColumn(amount, right) {
   for (var i = 0; i < amount; i++) {
-    for (var j = 0; j < table.rows.length; j++) {
+    for (var j = 0; j < board.getElementsByClassName("row").length; j++) {
+      let cell = document.createElement("div");
+      cell.className = "col s1";
       if (right) {
-        table.rows[j].insertCell(width).innerHTML =
+        board.getElementsByClassName("row")[j]
+        .appendChild(cell).innerHTML =
           '<button id = "tile"></button>';
       } else {
-        table.rows[j].insertCell(0).innerHTML = '<button id = "tile"></button>';
+        board.getElementsByClassName("row")[j]
+        .insertBefore(cell, board.getElementsByClassName("row")[j]
+        .childNodes[0])
+        .innerHTML = '<button id = "tile"></button>';
       }
     }
     width++;
