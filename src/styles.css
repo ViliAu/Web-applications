@@ -17,8 +17,8 @@ body {
 /* Game buttons */
 #tile {
   font: 30px Helvetica;
-  height: 60px;
-  width: 60px;
+  height: 55px;
+  width: 55px;
   margin: -1px;
   background-color: darkgrey;
   user-select: none;
