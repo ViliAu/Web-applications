@@ -26,7 +26,7 @@ function createTable() {
     table.insertRow(i);
     for (var j = 0; j < width; j++) {
       table.rows.item(i).insertCell(j).innerHTML =
-        '<button id = "tile"></button>';
+        '';
     }
   }
   cells = table.getElementsByTagName("td");
@@ -143,7 +143,7 @@ function editCell(posY, posX) {
 }
 
 function getCell(posY, posX) {
-  return table.rows[posY].getElementsByTagName("button")[posX];
+  return table.rows[posY].getElementsByTagName("td")[posX];
 }
 
 function checkWin(posY, posX) {
@@ -230,7 +230,7 @@ function addRow(amount, down) {
     for (var j = 0; j < width; j++) {
       if (down) {
         table.rows[height].insertCell(j).innerHTML =
-          '<button id = "tile"></button>';
+          '';
       } else {
         table.rows[0].insertCell(j).innerHTML = '<button id = "tile"></button>';
       }
