@@ -17,8 +17,8 @@ body {
 /* Game buttons */
 td {
   font: 30px Helvetica;
-  height: 60px;
-  width: 60px;
+  height: 59px;
+  width: 59px;
   margin: -1px;
   background-color: darkgrey;
   user-select: none;
