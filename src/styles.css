@@ -15,10 +15,10 @@ body {
 }
 
 /* Game buttons */
-td {
+#tile {
   font: 30px Helvetica;
-  height: 59px;
-  width: 59px;
+  height: 60px;
+  width: 60px;
   margin: -1px;
   background-color: darkgrey;
   user-select: none;

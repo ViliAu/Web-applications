@@ -26,7 +26,7 @@ function createTable() {
     table.insertRow(i);
     for (var j = 0; j < width; j++) {
       table.rows.item(i).insertCell(j).innerHTML =
-        '';
+        '<button id = "tile"></button>';
     }
   }
   cells = table.getElementsByTagName("td");
@@ -90,7 +90,7 @@ function setupMouse() {
   // Scroll wheel listener
   document.addEventListener("wheel", function(event) {
     // Calculate scale
-    scale += event.deltaY === -125 ? 0.1 : -0.1;
+    scale += event.deltaY === -100 ? 0.1 : -0.1;
     // Clamp scale
     scale = scale < 0.5 ? 0.5 : scale > 1.5 ? 1.5 : scale;
     // Apply scale
@@ -129,7 +129,7 @@ function handleClick(posY, posX) {
     return;
   }
   // Check if the table needs expanding (commented so the assessment works)
-  //checkExpanding(posY, posX);
+  checkExpanding(posY, posX);
 
   // Change turns and update summary
   changeTurn();
@@ -143,7 +143,7 @@ function editCell(posY, posX) {
 }
 
 function getCell(posY, posX) {
-  return table.rows[posY].getElementsByTagName("td")[posX];
+  return table.rows[posY].getElementsByTagName("button")[posX];
 }
 
 function checkWin(posY, posX) {
@@ -230,7 +230,7 @@ function addRow(amount, down) {
     for (var j = 0; j < width; j++) {
       if (down) {
         table.rows[height].insertCell(j).innerHTML =
-          '';
+          '<button id = "tile"></button>';
       } else {
         table.rows[0].insertCell(j).innerHTML = '<button id = "tile"></button>';
       }
