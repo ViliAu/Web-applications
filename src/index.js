@@ -129,7 +129,7 @@ function handleClick(posY, posX) {
     return;
   }
   // Check if the table needs expanding (commented so the assessment works)
-  checkExpanding(posY, posX);
+  //checkExpanding(posY, posX);
 
   // Change turns and update summary
   changeTurn();
